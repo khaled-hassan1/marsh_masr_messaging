@@ -2,7 +2,7 @@ name: Masrah Masr Notification
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # يعمل كل 30 دقيقة
+    - cron: '0 12,20 * * *'
   workflow_dispatch: # للتشغيل اليدوي للتجربة
 
 jobs:
