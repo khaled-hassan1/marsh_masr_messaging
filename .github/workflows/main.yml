@@ -1,0 +1,34 @@
+name: Masrah Masr Notification
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # يعمل كل 30 دقيقة
+  workflow_dispatch: # للتشغيل اليدوي للتجربة
+
+jobs:
+  check-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+            python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests firebase-admin
+
+      - name: Run Script
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: python script.py
+
+      - name: Commit and Push if updated
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add last_video_id.txt
+          git diff --quiet && git diff --cached --quiet || (git commit -m "📌 Update last video ID" && git push)
